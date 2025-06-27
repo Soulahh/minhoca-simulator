@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #define TAM 10
 #define TAM_MINHOCA 5
+enum{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
+
+
 typedef struct{
     int x;
     int y;
@@ -15,13 +24,12 @@ typedef struct{
     Ponto segmentos[5];
 } Minhoca;
 
-int inicializar_matriz(char matriz[TAM][TAM]){
+void inicializar_matriz(char matriz[TAM][TAM]){
    for (int i = 0; i < TAM; i++){
     for (int j =  0; j < TAM; j++){
         matriz[i][j] = ' ';
     }
    }
-    return 0; 
 }
 
 Minhoca inicializar_minhoca(){
@@ -38,6 +46,55 @@ void inserir_minhoca_no_mapa(Minhoca minhoca, char matriz[TAM][TAM], Ponto ponto
     for(int i = 0;i<TAM_MINHOCA;i++){
         matriz[i][ponto.y] = minhoca.segmentos[i].simbolo;
     }
+}
+
+void mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM],int direcao){
+    switch(direcao){
+        case UP:
+            mover_cima(minhoca, matriz);
+            break;
+        case DOWN:
+            mover_baixo(minhoca, matriz);
+            break;
+        case LEFT:
+            mover_esquerda(minhoca, matriz);
+            break;
+        default:
+            mover_direita(minhoca, matriz);
+            break;
+    }
+}
+
+void mover_cima(Minhoca *minhoca, char matriz[TAM][TAM]){
+    for(int i = TAM_MINHOCA-1; i > 0; i--){;
+        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
+        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
+    }
+    (*minhoca).segmentos[0].x--;
+}
+
+void mover_baixo(Minhoca *minhoca, char matriz[TAM][TAM]){
+    for(int i = TAM_MINHOCA-1; i > 0; i--){;
+        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
+        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
+    }
+    (*minhoca).segmentos[0].x++;
+}
+
+void mover_esquerda(Minhoca *minhoca, char matriz[TAM][TAM]){
+    for(int i = 4; i > 0; i--){;
+        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
+        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
+    }
+    (*minhoca).segmentos[0].y--;
+}
+
+void mover_direita(Minhoca *minhoca, char matriz[TAM][TAM]){
+    for(int i = 4; i > 0; i--){;
+        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
+        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
+    }
+    (*minhoca).segmentos[0].y++;
 }
 
 void imprimir_matriz(char matriz[TAM][TAM]){
