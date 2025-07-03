@@ -41,27 +41,45 @@ Minhoca inicializar_minhoca(){
     minhoca.segmentos[TAM_MINHOCA - 1].simbolo = '.';
     return minhoca;
 }
-
-void inserir_minhoca_no_mapa(Minhoca minhoca, char matriz[TAM][TAM], Ponto ponto){
-    for(int i = 0;i<TAM_MINHOCA;i++){
-        matriz[i][ponto.y] = minhoca.segmentos[i].simbolo;
-    }
+int checar_se_casa_ta_limpa(int x, int y, char matriz[TAM][TAM]){
+    if((x < 0 || x >= TAM) || (y < 0 || y >= TAM))
+        return 0;
+    if(matriz[x][y] == ' ')
+        return 1;
+    return 0;
 }
 
-void mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM],int direcao){
-    switch(direcao){
-        case UP:
-            mover_cima(minhoca, matriz);
-            break;
-        case DOWN:
-            mover_baixo(minhoca, matriz);
-            break;
-        case LEFT:
-            mover_esquerda(minhoca, matriz);
-            break;
-        default:
-            mover_direita(minhoca, matriz);
-            break;
+
+void inserir_minhoca_no_mapa(Minhoca *minhoca, char matriz[TAM][TAM], Ponto ponto){
+    matriz[ponto.x][ponto.y] = minhoca->segmentos[0].simbolo; //insere a cabeça da minhoca na matriz
+    int x = ponto.x;
+    int y = ponto.y;
+    for(int i = 1;i<TAM_MINHOCA;i++){
+
+            minhoca->segmentos[i-1].x = x;
+            minhoca->segmentos[i-1].y = y;
+            if (checar_se_casa_ta_limpa(x+1, y, matriz)) {
+                matriz[x+1][y] = minhoca->segmentos[i].simbolo;
+                minhoca->segmentos[i].x = x+1;
+                minhoca->segmentos[i].y = y;
+                x++;
+            } else if (checar_se_casa_ta_limpa(x-1, y, matriz)) {
+                matriz[x-1][y] = minhoca->segmentos[i].simbolo;
+                minhoca->segmentos[i].x = x-1;
+                minhoca->segmentos[i].y = y;
+                x--;
+            } else if (checar_se_casa_ta_limpa(x, y+1, matriz)) {
+                matriz[x][y+1] = minhoca->segmentos[i].simbolo;
+                minhoca->segmentos[i].x = x;
+                minhoca->segmentos[i].y = y+1;
+                y++;
+            } else if (checar_se_casa_ta_limpa(x, y-1, matriz)) {
+                matriz[x][y-1] = minhoca->segmentos[i].simbolo;
+                minhoca->segmentos[i].x = x;
+                minhoca->segmentos[i].y = y-1;
+                y--;
+            }
+
     }
 }
 
@@ -97,6 +115,24 @@ void mover_direita(Minhoca *minhoca, char matriz[TAM][TAM]){
     (*minhoca).segmentos[0].y++;
 }
 
+
+void mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM],int direcao){
+    switch(direcao){
+        case UP:
+            mover_cima(minhoca, matriz);
+            break;
+        case DOWN:
+            mover_baixo(minhoca, matriz);
+            break;
+        case LEFT:
+            mover_esquerda(minhoca, matriz);
+            break;
+        default:
+            mover_direita(minhoca, matriz);
+            break;
+    }
+}
+
 void imprimir_matriz(char matriz[TAM][TAM]){
     for(int i = 0; i < TAM; i++){
         for(int j = 0; j < TAM; j++){
@@ -128,7 +164,14 @@ int main(){
     char matriz[TAM][TAM];
     inicializar_matriz(matriz);
     Minhoca minhoca = inicializar_minhoca();
-    inserir_minhoca_no_mapa(minhoca, matriz, ponto);
+
+    do{
+        printf("Insira o ponto inicial da minhoca: (formato: 'x y'): ");
+        scanf("%d %d", ponto.x,ponto.y);
+    } while((ponto.x < 0 || ponto.x > 10) || (ponto.y < 0 || ponto.y > 10));
+
+
+    inserir_minhoca_no_mapa(&minhoca, matriz, ponto);
     imprimir_matriz(matriz);
     return 0;
 }
