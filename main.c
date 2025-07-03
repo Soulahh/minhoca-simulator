@@ -83,63 +83,45 @@ void inserir_minhoca_no_mapa(Minhoca *minhoca, char matriz[TAM][TAM], Ponto pont
     }
 }
 
-void mover_cima(Minhoca *minhoca, char matriz[TAM][TAM]){
-    for(int i = TAM_MINHOCA-1; i > 0; i--){;
-        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
-        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
-    }
-    (*minhoca).segmentos[0].x--;
-}
+int mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM],int direcao){
 
-void mover_baixo(Minhoca *minhoca, char matriz[TAM][TAM]){
-    for(int i = TAM_MINHOCA-1; i > 0; i--){;
-        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
-        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
-    }
-    (*minhoca).segmentos[0].x++;
-}
+    int nova_x = minhoca->segmentos[0].x;
+    int nova_y = minhoca->segmentos[0].y;
 
-void mover_esquerda(Minhoca *minhoca, char matriz[TAM][TAM]){
-    for(int i = 4; i > 0; i--){;
-        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
-        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
-    }
-    (*minhoca).segmentos[0].y--;
-}
-
-void mover_direita(Minhoca *minhoca, char matriz[TAM][TAM]){
-    for(int i = 4; i > 0; i--){;
-        (*minhoca).segmentos[i].x = (*minhoca).segmentos[i-1].x;
-        (*minhoca).segmentos[i].y = (*minhoca).segmentos[i-1].y;
-    }
-    (*minhoca).segmentos[0].y++;
-}
-
-
-void mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM],int direcao){
     switch(direcao){
-        case UP:
-            mover_cima(minhoca, matriz);
-            break;
-        case DOWN:
-            mover_baixo(minhoca, matriz);
-            break;
-        case LEFT:
-            mover_esquerda(minhoca, matriz);
-            break;
-        default:
-            mover_direita(minhoca, matriz);
-            break;
+        case UP:    nova_x--; break;
+        case DOWN:  nova_x++; break;
+        case LEFT:  nova_y--; break;
+        case RIGHT: nova_y++; break;
+        default:    return 0;
     }
+    
+    if(!checar_se_casa_ta_limpa(nova_x,nova_y,matriz))
+        return 0;
+    
+    for(int i = TAM_MINHOCA - 1; i > 0; i++){
+        minhoca->segmentos[i] = minhoca->segmentos[i-1];
+    }
+
+    minhoca->segmentos[0].x = nova_x;
+    minhoca->segmentos[0].y = nova_y;
+
+    return 1;
 }
 
 void imprimir_matriz(char matriz[TAM][TAM]){
+    printf("= = = = = = = = = = \n");
     for(int i = 0; i < TAM; i++){
         for(int j = 0; j < TAM; j++){
-            printf("%c ", matriz[i][j]);
+            printf("%c", matriz[i][j]);
         }
         printf("\n");
     }
+    printf("= = = = = = = = = = \n");
+}
+
+void adicionar_obstaculo(int x, int y, char matriz[TAM][TAM]){
+    
 }
 
 /*
@@ -167,11 +149,15 @@ int main(){
 
     do{
         printf("Insira o ponto inicial da minhoca: (formato: 'x y'): ");
-        scanf("%d %d", ponto.x,ponto.y);
-    } while((ponto.x < 0 || ponto.x > 10) || (ponto.y < 0 || ponto.y > 10));
+        scanf("%d %d", &ponto.x, &ponto.y);
+    } while((ponto.x < 0 || ponto.x >= TAM) || (ponto.y < 0 || ponto.y >= TAM));
 
 
     inserir_minhoca_no_mapa(&minhoca, matriz, ponto);
+    printf("%d %d\n", minhoca.segmentos[0].x, minhoca.segmentos[0].y);
+    imprimir_matriz(matriz);
+    mover_minhoca(&minhoca, matriz, DOWN);
+    printf("%d %d\n", minhoca.segmentos[0].x, minhoca.segmentos[0].y);
     imprimir_matriz(matriz);
     return 0;
 }
