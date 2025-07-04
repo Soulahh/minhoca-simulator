@@ -259,6 +259,10 @@ int main(){
         inicializar_matriz(matriz);
         adicionar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
         atualizar_mapa_com_minhoca(&minhoca, matriz);
+        fflush(stdin);
+        printf("Pressione ENTER para ver o próximo movimento!\n");
+        getchar();
+        system("cls");
         imprimir_matriz(matriz);
     }
     terminar_jogo(&casas_visitadas, quantidade_obstaculos);
