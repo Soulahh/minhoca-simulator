@@ -133,14 +133,15 @@ int mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM], int direcao, int visi
 }
 
 void imprimir_matriz(char matriz[TAM][TAM]){
-    printf("=  =  =  =  =  =  =  =  =  = \n");
+    printf("\n\n\n");
+    printf("\n--------------------------------------------------\n");
     for(int i = 0; i < TAM; i++){
         for(int j = 0; j < TAM; j++){
-            printf(" %c ", matriz[i][j]);
+            printf("| %c |", matriz[i][j]);
         }
-        printf("\n\n");
+        printf("\n--------------------------------------------------\n");
     }
-    printf("=  =  =  =  =  =  =  =  =  = \n");
+    printf("\n");
 }
 
 void adicionar_obstaculos(int qtd, char matriz[TAM][TAM], Ponto obstaculos[qtd]){
