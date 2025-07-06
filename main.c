@@ -189,7 +189,7 @@ int tentar_mover_aleatorio(Minhoca *minhoca, char matriz[TAM][TAM], int visitada
 void terminar_jogo(int *casas_visitadas, int qtd_obstaculos){
     int casas_nao_visitadas = (TAM * TAM) - qtd_obstaculos - (*casas_visitadas);
     printf("\nO numero de casas visitadas foi: %d\n", *casas_visitadas);
-    printf("O numero de casas nao visitadas foi: %d\n",casas_nao_visitadas);
+    printf("O numero de casas nao visitadas foi: %d\n\n",casas_nao_visitadas);
     exit(0);
 }
 
@@ -204,9 +204,6 @@ Criar obstaculos aleatorios
 JOGADOR ESCOLHE -> Onde a gente começa e QTD movimentos!
 Terminar jogo
 Contar casas que passaram
-
-
-
 */
 
 int main(){
