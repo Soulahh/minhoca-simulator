@@ -1,1 +1,1 @@
-   setlocale(LC_ALL, "Portuguese");
+i

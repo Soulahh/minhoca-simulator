@@ -134,6 +134,7 @@ int mover_minhoca(Minhoca *minhoca, char matriz[TAM][TAM], int direcao, int visi
 
 void imprimir_matriz(char matriz[TAM][TAM]){
     printf("\n\n\n");
+    printf("\n-------------------MAPA DO JOGO-------------------\n");
     printf("\n--------------------------------------------------\n");
     for(int i = 0; i < TAM; i++){
         for(int j = 0; j < TAM; j++){
@@ -168,22 +169,19 @@ void gerar_obstaculos(int qtd_obstaculos, char matriz[TAM][TAM], Ponto obstaculo
 int tentar_mover_aleatorio(Minhoca *minhoca, char matriz[TAM][TAM], int visitadas[TAM][TAM], int *casas_visitadas) {
     int direcoes[4] = {UP, DOWN, LEFT, RIGHT};
 
-    // Embaralhar o array de direções
     for (int i = 3; i > 0; i--) {
         int j = rand() % (i + 1);
         int temp = direcoes[i];
         direcoes[i] = direcoes[j];
         direcoes[j] = temp;
     }
-
-    // Tentar mover em cada direção, na ordem embaralhada
+ 
     for (int i = 0; i < 4; i++) {
         if (mover_minhoca(minhoca, matriz, direcoes[i], visitadas, casas_visitadas)) {
-            return 1; // Movimento feito com sucesso
+            return 1;
         }
     }
-
-    return 0; // Não conseguiu mover para lugar nenhum
+    return 0;
 }
 
 void terminar_jogo(int *casas_visitadas, int qtd_obstaculos){
@@ -219,26 +217,35 @@ int main(){
     Minhoca minhoca = inicializar_minhoca();
 
 
-    printf("\nDefina a quantidade de obstaculos: ");
-    do{
-    scanf("%d", &quantidade_obstaculos);
-    if (quantidade_obstaculos > ((TAM * TAM) - TAM_MINHOCA) || quantidade_obstaculos < 0)
-        printf("\nQuantidade invalida. Tente novamente: ");
-    }while(quantidade_obstaculos > ((TAM * TAM) - TAM_MINHOCA) || quantidade_obstaculos < 0);
+    printf("\nDefina a quantidade de obstaculos (1-95): ");
+
+    while(scanf("%d", &quantidade_obstaculos) != 1 || (quantidade_obstaculos > ((TAM * TAM) - TAM_MINHOCA) || quantidade_obstaculos < 0)){
+        printf("Entrada invalida. Insira um numero entre 1 e 95: ");
+        int c;
+        while(((c = getchar()) != '\n' && c != EOF));
+    }
+    int c;
+    while(((c = getchar()) != '\n' && c != EOF));
+
 
     Ponto obstaculos[quantidade_obstaculos];
 
-    do{
-        printf("Insira o ponto inicial da minhoca: (formato: 'x y'): ");
-        scanf("%d %d", &ponto.x, &ponto.y);
-        if ((ponto.x < 0 || ponto.x >= TAM) || (ponto.y < 0 || ponto.y >= TAM))
-            printf("\nPosicao invalida. Tente novamente: ");
-    } while((ponto.x < 0 || ponto.x >= TAM) || (ponto.y < 0 || ponto.y >= TAM));
+    printf("Insira o ponto inicial da minhoca: (formato: 'x y' / range: 1 - 10): ");
 
-    do {
-        printf("\nInsira a quantidade de movimentos: ");
-        scanf("%d", &quantidade_movimentos);
-    } while(quantidade_movimentos <= 0);
+    while (scanf("%d %d", &ponto.x, &ponto.y) != 2 || ((ponto.x < 0 || ponto.x >= TAM) || (ponto.y < 0 || ponto.y >= TAM))){
+        printf("Entrada invalida. Por favor insira o ponto inicial entre 1-10 no formato 'x y': ");
+        while(((c = getchar()) != '\n' && c != EOF));
+    }
+    while(((c = getchar()) != '\n' && c != EOF));
+
+    printf("\nInsira a quantidade de movimentos: ");
+
+    while(scanf("%d", &quantidade_movimentos) != 1 || (quantidade_movimentos <= 0)){
+        printf("Entrada invalida. Por favor insira uma quantidade inteira positiva: ");
+        while(((c = getchar()) != '\n' && c != EOF));
+
+    }
+    while(((c = getchar()) != '\n' && c != EOF));
 
     inserir_minhoca_no_mapa(&minhoca, matriz, ponto);
     visitadas[minhoca.segmentos[0].x][minhoca.segmentos[0].y] = 1;
