@@ -194,14 +194,14 @@ void terminar_jogo(int *casas_visitadas, int qtd_obstaculos){
 
 /*
 TODO: 
-Inicializar a matriz
-Criar o vetor(minhoca)
-Inserir a minhoca no mapa (primeiro arbitrariamente)
-Lógica de movimento(A cabeca move primeiro e cada parte segue a anterior)
-Criar obstaculos aleatorios
-JOGADOR ESCOLHE -> Onde a gente começa e QTD movimentos!
-Terminar jogo
-Contar casas que passaram
+Inicializar a matriz v
+Criar o vetor(minhoca) v
+Inserir a minhoca no mapa (primeiro arbitrariamente) v
+Lógica de movimento(A cabeca move primeiro e cada parte segue a anterior) v
+Criar obstaculos aleatorios v
+JOGADOR ESCOLHE -> Onde a gente começa e QTD movimentos! v
+Terminar jogo v
+Contar casas que passaram v
 */
 
 int main(){
