@@ -230,10 +230,10 @@ int main(){
 
     Ponto obstaculos[quantidade_obstaculos];
 
-    printf("Insira o ponto inicial da minhoca: (formato: 'x y' / range: 1 - 10): ");
+    printf("Insira o ponto inicial da minhoca: (formato: 'x y' / range: 0 - 9): ");
 
     while (scanf("%d %d", &ponto.x, &ponto.y) != 2 || ((ponto.x < 0 || ponto.x >= TAM) || (ponto.y < 0 || ponto.y >= TAM))){
-        printf("Entrada invalida. Por favor insira o ponto inicial entre 1-10 no formato 'x y': ");
+        printf("Entrada invalida. Por favor insira o ponto inicial entre 0-9 no formato 'x y': ");
         while(((c = getchar()) != '\n' && c != EOF));
     }
     while(((c = getchar()) != '\n' && c != EOF));
