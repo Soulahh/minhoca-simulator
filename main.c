@@ -60,37 +60,38 @@ void atualizar_mapa_com_minhoca(Minhoca *minhoca, char matriz[TAM][TAM]) {
 }
 
 
-void inserir_minhoca_no_mapa(Minhoca *minhoca, char matriz[TAM][TAM], Ponto ponto){
+int inserir_minhoca_no_mapa(Minhoca *minhoca, char matriz[TAM][TAM], Ponto ponto){
     matriz[ponto.x][ponto.y] = minhoca->segmentos[0].simbolo; //insere a cabeça da minhoca na matriz
     int x = ponto.x;
     int y = ponto.y;
     for(int i = 1;i<TAM_MINHOCA;i++){
-
-            minhoca->segmentos[i-1].x = x;
-            minhoca->segmentos[i-1].y = y;
-            if (checar_se_casa_ta_limpa(x+1, y, matriz)) {
-                matriz[x+1][y] = minhoca->segmentos[i].simbolo;
-                minhoca->segmentos[i].x = x+1;
-                minhoca->segmentos[i].y = y;
-                x++;
-            } else if (checar_se_casa_ta_limpa(x-1, y, matriz)) {
-                matriz[x-1][y] = minhoca->segmentos[i].simbolo;
-                minhoca->segmentos[i].x = x-1;
-                minhoca->segmentos[i].y = y;
-                x--;
-            } else if (checar_se_casa_ta_limpa(x, y+1, matriz)) {
-                matriz[x][y+1] = minhoca->segmentos[i].simbolo;
-                minhoca->segmentos[i].x = x;
-                minhoca->segmentos[i].y = y+1;
-                y++;
-            } else if (checar_se_casa_ta_limpa(x, y-1, matriz)) {
-                matriz[x][y-1] = minhoca->segmentos[i].simbolo;
-                minhoca->segmentos[i].x = x;
-                minhoca->segmentos[i].y = y-1;
-                y--;
-            }
-
+        minhoca->segmentos[i-1].x = x;
+        minhoca->segmentos[i-1].y = y;
+        if (checar_se_casa_ta_limpa(x+1, y, matriz)) {
+            matriz[x+1][y] = minhoca->segmentos[i].simbolo;
+            minhoca->segmentos[i].x = x+1;
+            minhoca->segmentos[i].y = y;
+            x++;
+        } else if (checar_se_casa_ta_limpa(x-1, y, matriz)) {
+            matriz[x-1][y] = minhoca->segmentos[i].simbolo;
+            minhoca->segmentos[i].x = x-1;
+            minhoca->segmentos[i].y = y;
+            x--;
+        } else if (checar_se_casa_ta_limpa(x, y+1, matriz)) {
+            matriz[x][y+1] = minhoca->segmentos[i].simbolo;
+            minhoca->segmentos[i].x = x;
+            minhoca->segmentos[i].y = y+1;
+            y++;
+        } else if (checar_se_casa_ta_limpa(x, y-1, matriz)) {
+            matriz[x][y-1] = minhoca->segmentos[i].simbolo;
+            minhoca->segmentos[i].x = x;
+            minhoca->segmentos[i].y = y-1;
+            y--;
+        } else {
+            return 0;
+        }
     }
+    return 1;
 }
 
 void atualizar_simbolos(Minhoca *minhoca){
@@ -186,7 +187,7 @@ int tentar_mover_aleatorio(Minhoca *minhoca, char matriz[TAM][TAM], int visitada
 
 void terminar_jogo(int *casas_visitadas, int qtd_obstaculos){
     int casas_nao_visitadas = (TAM * TAM) - qtd_obstaculos - (*casas_visitadas);
-    printf("\nO numero de casas visitadas foi: %d\n", *casas_visitadas);
+    printf("\nO numero de casas unicas visitadas foi: %d\n", *casas_visitadas);
     printf("O numero de casas nao visitadas foi: %d\n\n",casas_nao_visitadas);
     exit(0);
 }
@@ -247,14 +248,16 @@ int main(){
     }
     while(((c = getchar()) != '\n' && c != EOF));
 
-    inserir_minhoca_no_mapa(&minhoca, matriz, ponto);
+    gerar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
+    adicionar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
+    int jogo_pode_comecar = inserir_minhoca_no_mapa(&minhoca, matriz, ponto);
+    if (!jogo_pode_comecar){
+        printf("\nNao foi possivel posicionar toda a minhoca a partir da posicao inicial! (Erro 404)\n\n");
+        exit(1);
+    }
     visitadas[minhoca.segmentos[0].x][minhoca.segmentos[0].y] = 1;
     casas_visitadas = 1;
     printf("%d %d\n", minhoca.segmentos[0].x, minhoca.segmentos[0].y);
-
-    gerar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
-    adicionar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
-
     for (int i = 0; i < quantidade_movimentos; i++){
         Ponto cauda_antiga = minhoca.segmentos[TAM_MINHOCA - 1];
         if (!tentar_mover_aleatorio(&minhoca,matriz,visitadas,&casas_visitadas)){
@@ -264,6 +267,8 @@ int main(){
         inicializar_matriz(matriz);
         adicionar_obstaculos(quantidade_obstaculos, matriz, obstaculos);
         atualizar_mapa_com_minhoca(&minhoca, matriz);
+        system("cls");
+        imprimir_matriz(matriz);
         fflush(stdin);
         printf("Pressione ENTER para ver o próximo movimento!\n");
         getchar();
