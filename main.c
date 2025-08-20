@@ -1,3 +1,5 @@
+//Dupla: Tiago Freitas / Cauã Bonfim
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
