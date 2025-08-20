@@ -36,3 +36,5 @@ cd diretorio-do-projeto
 
 # Compile o programa
 gcc main.c -o minhoca
+```
+![Demonstração da Simulação](./demo_minhoca.gif)
